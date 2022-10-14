@@ -1,3 +1,3 @@
-export function multiply(a: number, b: number): Promise<number> {
-  return Promise.resolve(a * b);
-}
+export { Day } from './Day.component';
+export { Month } from './Month.component';
+export { CalendarList } from './CalendarList.component';
