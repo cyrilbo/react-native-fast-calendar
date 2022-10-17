@@ -1,18 +1,19 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Day } from './Day.component';
+import { DayComponent as DayComponent } from './Day.component';
+import type { Day } from './types/Day.type';
 
 type WeekProps = {
-  dates: Date[];
+  days: Day[];
   onDayPress: (date: Date) => void;
 };
 
-export const Week = ({ dates, onDayPress }: WeekProps) => {
-  if (dates.length === 0) return null;
+export const WeekComponent = ({ days, onDayPress }: WeekProps) => {
+  if (days.length === 0) return null;
   return (
     <View style={styles.weekContainer}>
-      {dates.map((day) => (
-        <Day date={day} onPress={onDayPress} />
+      {days.map((day) => (
+        <DayComponent day={day} onPress={onDayPress} />
       ))}
     </View>
   );
