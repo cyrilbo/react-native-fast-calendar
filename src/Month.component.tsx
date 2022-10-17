@@ -1,15 +1,28 @@
-import { eachDayOfInterval, endOfMonth, format, startOfMonth } from 'date-fns';
+import {
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns';
 import React from 'react';
 import { useMemo } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { groupDatesByWeek } from './dates/groupDatesByWeek.helper';
+import { DayIndex } from './dates/dates.constants';
+import { sliceIntoChunks } from './helpers/array.helpers';
 import { Week } from './Week.component';
 
 const computeWeeks = (date: Date) => {
-  const firstDay = startOfMonth(date);
-  const lastDay = endOfMonth(date);
+  const firstDay = startOfWeek(startOfMonth(date), {
+    weekStartsOn: DayIndex.Monday,
+  });
+  const lastDay = endOfWeek(endOfMonth(date), {
+    weekStartsOn: DayIndex.Monday,
+  });
   const days = eachDayOfInterval({ start: firstDay, end: lastDay });
-  return groupDatesByWeek(days);
+  const weeks = sliceIntoChunks(days, 7);
+  return weeks;
 };
 
 type MonthProps = {
@@ -22,7 +35,7 @@ export const Month = ({ date, onDayPress }: MonthProps) => {
   return (
     <>
       <Text style={styles.monthName}>{format(date, 'LLLL y')}</Text>
-      {Object.values(weeks).map((weekDays) => (
+      {weeks.map((weekDays) => (
         <Week dates={weekDays} onDayPress={onDayPress} />
       ))}
     </>
